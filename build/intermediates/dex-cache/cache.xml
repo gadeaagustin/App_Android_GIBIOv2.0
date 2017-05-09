@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="C:\Users\Agustin\OneDrive\Documentos\FACU\Android GIBIO\App_Android_GIBIO\app\libs\activation.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="d1257cbff6faa44c1f325ae0d9413522d4644383">
+        <dex dex="C:\Users\Agustin\OneDrive\Documentos\FACU\Android GIBIO\App_Android_GIBIO\app\build\intermediates\pre-dexed\debug\activation_e3c907524c75ea5ce0c69bfc651a6512bbc062d7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Agustin\OneDrive\Documentos\FACU\Android GIBIO\App_Android_GIBIO\app\libs\additionnal.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="bd9e8dc422bb8c8405359947fe9f4282b49f57f4">
+        <dex dex="C:\Users\Agustin\OneDrive\Documentos\FACU\Android GIBIO\App_Android_GIBIO\app\build\intermediates\pre-dexed\debug\additionnal_2e32b2fedd456ffd49a2027b0a2b4290ea32b265.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Agustin\OneDrive\Documentos\FACU\Android GIBIO\App_Android_GIBIO\app\libs\GraphView-3.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="e187192858ff7a5ff7864d6f6a754427e6cb3a87">
+        <dex dex="C:\Users\Agustin\OneDrive\Documentos\FACU\Android GIBIO\App_Android_GIBIO\app\build\intermediates\pre-dexed\debug\GraphView-3.0_b6cfab7e65aae26baabb6ce49088a54d1ad0b30d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Agustin\OneDrive\Documentos\FACU\Android GIBIO\App_Android_GIBIO\app\libs\mail.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="428e267abff0d10802ccde86b915da2c20471160">
+        <dex dex="C:\Users\Agustin\OneDrive\Documentos\FACU\Android GIBIO\App_Android_GIBIO\app\build\intermediates\pre-dexed\debug\mail_6249e9863cdacfa70d36fc5af5b10b5362acb85c.jar" />
+    </item>
+
+</items>
