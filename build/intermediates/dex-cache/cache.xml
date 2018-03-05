@@ -3,21 +3,21 @@
 
     <item
         is-multidex="false"
-        jar="C:\Users\Agustin\OneDrive\Documentos\FACU\Android GIBIO\App_Android_GIBIO\app\libs\activation.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="d1257cbff6faa44c1f325ae0d9413522d4644383">
-        <dex dex="C:\Users\Agustin\OneDrive\Documentos\FACU\Android GIBIO\App_Android_GIBIO\app\build\intermediates\pre-dexed\debug\activation_e3c907524c75ea5ce0c69bfc651a6512bbc062d7.jar" />
-    </item>
-    <item
-        is-multidex="false"
         jar="C:\Users\Agustin\OneDrive\Documentos\FACU\Android GIBIO\App_Android_GIBIO\app\libs\additionnal.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.0"
         sha1="bd9e8dc422bb8c8405359947fe9f4282b49f57f4">
         <dex dex="C:\Users\Agustin\OneDrive\Documentos\FACU\Android GIBIO\App_Android_GIBIO\app\build\intermediates\pre-dexed\debug\additionnal_2e32b2fedd456ffd49a2027b0a2b4290ea32b265.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\Agustin\OneDrive\Documentos\FACU\Android GIBIO\App_Android_GIBIO\app\libs\activation.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="d1257cbff6faa44c1f325ae0d9413522d4644383">
+        <dex dex="C:\Users\Agustin\OneDrive\Documentos\FACU\Android GIBIO\App_Android_GIBIO\app\build\intermediates\pre-dexed\debug\activation_e3c907524c75ea5ce0c69bfc651a6512bbc062d7.jar" />
     </item>
     <item
         is-multidex="false"

@@ -5,6 +5,6 @@ package com.gibio.bt_graph;
  */
 
 public class ConfigMail {
-    public static final String EMAIL ="gibio.pacientes@gmail.com";
-    public static final String PASSWORD ="grupogibio";
+    public static final String EMAIL ="gadea.agusin@gmail.com";
+    public static final String PASSWORD ="03744981035708";
 }

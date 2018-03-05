@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -21,10 +24,14 @@ import java.io.File;
 import java.io.OutputStreamWriter;
 
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.BodyPart;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.search.IntegerComparisonTerm;
 
 /**
  * Created by aguus on 22/3/2017.
@@ -37,23 +44,22 @@ public class AnamnesisActivity extends Activity implements View.OnClickListener,
     private String DatosPersonales, Antecedentes, SignosVitales, Electro, Antropo, MailCuerpo;
 
     //Datos personales
-    private EditText etNombre, etApellido, etEdad, etEmail, etOcupacion;
+    private EditText etNombre, etApellido, etEdad, etEmail;
     private RadioButton btHombre, btMujer;
-    private Spinner spPaises, spProvincias;
-    private Button bENVIAR;
+    private Spinner spPaises, spProvincias, spOcupacion;
+    private Button bENVIAR, bCalIMC;
 
     //Antecedentes Medicos
-    private CheckBox chkBebidasAlcoholicas, chkUsoDrogas, chkTabaquismo;
+    private CheckBox chkBebidasAlcoholicas, chkUsoDrogas, chkTabaquismo, chkSedentarismo, chkMedicaciones;
     private CheckBox chkTos, chkExpectoracion, chkHemoptisis, chkAsma, chkNeumonía;
-    private CheckBox chkDbt, chkHta, chkTbc;
-    private EditText  etOtrasEnfermedades;
+    private CheckBox chkDbt, chkHta, chkTbc, chkCol, chkHiper;
+    private CheckBox chkDbtFam, chkHtaFam, chkTbcFam;
+    private EditText  etOtrasEnfermedades, etFamOtrasEnf;
 
     //Signos Vitales
-    private EditText etFC, etFR, etTaxilar, etPesoAct;
-    private EditText etTalla, etBMI, etPreSis, etPreDia, etDeltax;
-
-    //Electrocardiograma
-    private EditText etRitmo, etFCelectro, etEjeQRS, etOndaP, etQRS, etOndaT, etST, etQTC;
+    private EditText etFC, etFR, etTaxilar, etPesoAct, etPesoHab;
+    private EditText etTalla, etPreSis, etPreDia, etDeltax;
+    private TextView txtIMC;
 
     //Mediciones Antropomedicas
     private EditText etCarotidaCuello, etCuelloHombro, etHombroBraquial, etHombroRadial, etCarotidaFemoral;
@@ -73,7 +79,6 @@ public class AnamnesisActivity extends Activity implements View.OnClickListener,
         etApellido=(EditText)findViewById(R.id.etApellido);
         etEmail=(EditText)findViewById(R.id.etEmail);
         etEdad=(EditText)findViewById(R.id.etEdad);
-        etOcupacion=(EditText)findViewById(R.id.etOcupacion);
 
         btHombre=(RadioButton)findViewById(R.id.btHombre);
         btMujer=(RadioButton)findViewById(R.id.btMujer);
@@ -83,20 +88,29 @@ public class AnamnesisActivity extends Activity implements View.OnClickListener,
         spPaises = (Spinner)findViewById(R.id.spPaises);
         spProvincias = (Spinner)findViewById(R.id.spProvincias);
 
-        ArrayAdapter<CharSequence> adaptadorPaises = ArrayAdapter.createFromResource(this, R.array.array_Paises, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adaptadorPaises = ArrayAdapter.createFromResource(this,
+                                R.array.array_Paises, android.R.layout.simple_spinner_item);
         adaptadorPaises.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spPaises.setAdapter(adaptadorPaises);
 
+        spPaises.setAdapter(new HintSpinnerAdapter(
+                adaptadorPaises, R.layout.hint_paises, this));
         //Se aplica listener para saber que item ha sido seleccionado
         //y poder usarlo en el método "onItemSelected"
         spPaises.setOnItemSelectedListener(this);
 
+        spOcupacion = (Spinner)findViewById(R.id.spOcupacion);
+        ArrayAdapter<CharSequence> adaptadorOcupacion = ArrayAdapter.createFromResource(this,
+                                R.array.array_Ocupacion, android.R.layout.simple_spinner_item);
+        adaptadorOcupacion.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spOcupacion.setAdapter(new HintSpinnerAdapter(
+                adaptadorOcupacion, R.layout.hint_ocupacion, this));
 
         //Cargo Antecedentes
         chkBebidasAlcoholicas = (CheckBox)findViewById(R.id.chkBebidasAlcoholicas);
         chkUsoDrogas = (CheckBox)findViewById(R.id.chkUsoDrogas);
         chkTabaquismo = (CheckBox)findViewById(R.id.chkTabaquismo);
-
+        chkSedentarismo = (CheckBox)findViewById(R.id.chkSedentarsismo);
+        chkMedicaciones = (CheckBox)findViewById(R.id.chkMedicaciones);
 
         chkTos = (CheckBox)findViewById(R.id.chkTos);
         chkExpectoracion = (CheckBox)findViewById(R.id.chkExpectoracion);
@@ -106,8 +120,15 @@ public class AnamnesisActivity extends Activity implements View.OnClickListener,
         chkDbt = (CheckBox)findViewById(R.id.chkDbt);
         chkHta = (CheckBox)findViewById(R.id.chkHta);
         chkTbc = (CheckBox)findViewById(R.id.chkTbc);
+        chkCol = (CheckBox)findViewById(R.id.chkCol);
+        chkHiper = (CheckBox)findViewById(R.id.chkHiper);
+
+        chkDbtFam = (CheckBox)findViewById(R.id.chkDbtFam);
+        chkHtaFam = (CheckBox)findViewById(R.id.chkHtaFam);
+        chkTbcFam = (CheckBox)findViewById(R.id.chkTbcFam);
 
         etOtrasEnfermedades=(EditText)findViewById(R.id.etOtrasEnfermedades);
+        etFamOtrasEnf=(EditText)findViewById(R.id.etFamOtrasEnf);
 
         //Cargo los editText de Signos Vitales
         etFC=(EditText)findViewById(R.id.etFC);
@@ -116,22 +137,13 @@ public class AnamnesisActivity extends Activity implements View.OnClickListener,
 
         etTaxilar=(EditText)findViewById(R.id.etTaxilar);
 
+        etPesoHab=(EditText)findViewById(R.id.etPesoHab);
         etPesoAct=(EditText)findViewById(R.id.etPesoAct);
         etTalla=(EditText)findViewById(R.id.etTalla);
-        etBMI=(EditText)findViewById(R.id.etBMI);
+        txtIMC=(TextView) findViewById(R.id.txtIMC);
+
         etPreSis=(EditText)findViewById(R.id.PreSis);
         etPreDia=(EditText)findViewById(R.id.etPreDia);
-        etDeltax=(EditText)findViewById(R.id.etDeltax);
-
-        //Cargo los editText de Electrocardiograma
-        etRitmo=(EditText)findViewById(R.id.etRitmo);
-        etFCelectro=(EditText)findViewById(R.id.etFCelectro);
-        etEjeQRS=(EditText)findViewById(R.id.etEjeQRS);
-        etOndaP=(EditText)findViewById(R.id.etOndaP);
-        etQRS=(EditText)findViewById(R.id.etQRS);
-        etOndaT=(EditText)findViewById(R.id.etOndaT);
-        etST=(EditText)findViewById(R.id.etST);
-        etQTC=(EditText)findViewById(R.id.etQTC);
 
         //Cargo los editText de Mediciones Antropomedicas
         etCarotidaCuello=(EditText)findViewById(R.id.etCarotidaCuello);
@@ -144,6 +156,10 @@ public class AnamnesisActivity extends Activity implements View.OnClickListener,
         //Boton para enviar datos
         bENVIAR = (Button) findViewById(R.id.bENVIAR);
         bENVIAR.setOnClickListener(this);
+
+        //Boton para calcular IMC
+        bCalIMC = (Button) findViewById(R.id.bCalIMC);
+        bCalIMC.setOnClickListener(this);
     }
 
 
@@ -151,14 +167,28 @@ public class AnamnesisActivity extends Activity implements View.OnClickListener,
     public void onClick(View v) {
         // TODO Auto-generated method stub
         switch (v.getId()) {
+            case R.id.bCalIMC:
+
+                String txPeso= etPesoAct.getText().toString();
+                String txAltura= etTalla.getText().toString();
+                int peso = Integer.parseInt(txPeso);
+                int altura = Integer.parseInt(txAltura);
+                if (peso <=0 || peso>200)   peso=70;
+                if (altura <=0 || altura>250)   altura=170;
+                int imc =(10000*peso)/(altura*altura);
+                String tximc = String.valueOf(imc);
+                txtIMC.setText(tximc);
+
+                break;
+
+
             case R.id.bENVIAR:
                 Cargar_Datos();
 
 
                 //Compruebo que se completo los datos personales
                 if(etNombre.getText().toString().equals("") || etApellido.getText().toString().equals("") ||
-                        etEmail.getText().toString().equals("") || etEdad.getText().toString().equals("")
-                        ||etOcupacion.getText().toString().equals(""))
+                        etEmail.getText().toString().equals("") || etEdad.getText().toString().equals(""))
                 {
                     String txtEnviado = "Complete datos personales";
                     Toast.makeText(this, txtEnviado, Toast.LENGTH_LONG).show();
@@ -200,9 +230,6 @@ public class AnamnesisActivity extends Activity implements View.OnClickListener,
                     } catch (MessagingException e) {
                         e.printStackTrace();
                     }
-
-                    // String txtEnviado = "Datos enviados";
-                   // Toast.makeText(this, txtEnviado, Toast.LENGTH_LONG).show();
                    startActivity(new Intent(AnamnesisActivity.this,MainMenuActivity.class));
 
                 }
@@ -221,25 +248,31 @@ public class AnamnesisActivity extends Activity implements View.OnClickListener,
         DatosPersonales ="Datos Personales, "+"\n"+ "Nombre,"+etNombre.getText()+"\n" + "Apellido, "+etApellido.getText()+"\n"+
                     "Edad, "+ etEdad.getText()+"\n"+ "Email, "+etEmail.getText()+"\n"+ "Sexo, "+sexo.toString()+"\n"+
                     "Pais, "+spPaises.getSelectedItem()+"\n" + "Provincia, " +spProvincias.getSelectedItem()+"\n"+
-                    "Ocupación, "+ etOcupacion.getText()+"\n";
+                    "Ocupación, "+ spOcupacion.getSelectedItem()+"\n";
 
         Antecedentes ="Habitos Toxicos"+"\n"+ "Bebidas Alcóholicas, "+ chkBebidasAlcoholicas.isChecked()+"\n"+
                     "Uso de drogas de abuso, "+chkUsoDrogas.isChecked()+"\n"+ "Tabaquismo, "+ chkTabaquismo.isChecked()+"\n"+
+                    "Sedentarismo, "+ chkSedentarismo.isChecked()+"\n"+ "Medicaciones, "+ chkMedicaciones.isChecked()+"\n"+
                     "Patologias, "+"\n" + "Enfermedades Respiratorias, "+"\n" +"Tos,"+chkTos.isChecked()+"\n"+
                     "Expectoración, "+chkExpectoracion.isChecked()+"\n"+ "Hemoptisis, "+ chkHemoptisis.isChecked()+"\n"+
                     "Asma, "+chkAsma.isChecked()+"\n"+ "Neumonía, "+chkNeumonía.isChecked()+"\n"+
-                    "Enfermedades Cardiovasculares, "+"\n"+ "DBT, "+chkDbt.isChecked()+"\n"+ "HTA, "+chkHta.isChecked()+"\n"+
-                    "TBC, "+chkTbc.isChecked()+"\n" + "Otras Enfermedades, "+etOtrasEnfermedades.getText()+"\n";
+                    "Enfermedades Cardiovasculares, "+"\n"+ "Diabetes, "+chkDbt.isChecked()+"\n"+
+                    "Hipertension Arterial, "+chkHta.isChecked()+"\n"+ "Tuberculosis, "+chkTbc.isChecked()+"\n"+
+                    "Colesterol, "+chkCol.isChecked()+"\n"+ "Hiperglicemia, "+chkHiper.isChecked()+"\n"
+                    +"Otras Enfermedades, "+etOtrasEnfermedades.getText()+"\n" +
+                    "Antecedentes Familiares, "+"\n"+ "Diabetes Familiar, "+chkDbtFam.isChecked()+"\n"+
+                    "Hipertension Arterial Familiar, "+chkHtaFam.isChecked()+"\n"+
+                    "Tuberculosis Familiar, "+chkTbcFam.isChecked()+"\n"+
+                    "Otras Enfermedades Familiares, "+etFamOtrasEnf.getText()+"\n";
 
-        SignosVitales = "Signos Vitales: "+"\n"+"Frecuencia Cardiaca[ppm],"+etFC.getText()+"\n"+
-                    "FR, "+etFR.getText()+"\n"+ "T° Axilar,"+etTaxilar.getText()+"\n"+
-                    "Peso Actual,"+etPesoAct.getText()+"\n"+
-                    "Talla,"+etTalla.getText()+"\n"+"BMI,"+etBMI.getText()+"\n"+"Presión Sistótica,"+etPreSis.getText()+"\n"+
-                    "Presión Diastólica,"+etPreDia.getText()+"\n"+ "Vel Onda Pulso Carotideo,"+etDeltax.getText()+"\n";
+        SignosVitales = "Signos Vitales: "+"\n"+ "Peso Habitual, "+etPesoHab.getText()+"\n"+
+                     "Peso Actual, "+etPesoAct.getText()+"\n"+ "Altura, "+etTalla.getText()+"\n"+
+                    "IMC, "+ txtIMC.getText() +"\n"+
+                    "Frecuencia Cardiaca[ppm], "+etFC.getText()+"\n"+
+                    "Frecuencia Respiratoria[rpm], "+etFR.getText()+"\n"+ "T° Axilar, "+etTaxilar.getText()+"\n"+
+                    "Presión Sistótica, "+etPreSis.getText()+"\n"+
+                    "Presión Diastólica, "+etPreDia.getText()+"\n";
 
-        Electro = "Electrocardiograma: "+"\n"+ "Ritmo,"+etRitmo.getText()+"\n"+ "FC electro,"+etFCelectro.getText()+"\n"+
-                "Eje QRS,"+etEjeQRS.getText()+"\n"+"Onda P,"+etOndaP.getText()+"\n"+"QRS,"+etQRS.getText()+"\n"+
-                "Onda T,"+etOndaT.getText()+"\n"+"ST,"+etST.getText()+"\n"+"QTC,"+etQTC.getText()+"\n";
 
         Antropo = "Mediciones Antropomedicas: "+"\n"+ "Carótida - Cuello,"+etCarotidaCuello.getText()+"\n"+
                 "Cuello - Hombro,"+etCuelloHombro.getText()+"\n"+ "Hombro Braquial,"+etHombroBraquial.getText()+"\n"+
@@ -248,15 +281,19 @@ public class AnamnesisActivity extends Activity implements View.OnClickListener,
 
         MailCuerpo ="-------------------------" +"\n"+ DatosPersonales +"-------------------------"
                     +"\n"+ Antecedentes + "-------------------------" +"\n"+ SignosVitales
-                    + "-------------------------"  +"\n"+ Electro + "-------------------------"  +"\n"+ Antropo ;
+                    + "-------------------------"  +"\n" +"\n"+ Antropo ;
 
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         //Se guarda en array de enteros los arrays de las provincias
-        int[] localidades = {R.array.array_Argentina,R.array.array_Brasil, R.array.array_Paraguay, R.array.array_Uruguay};
+        int[] localidades = { R.array.array_Argentina, R.array.array_Brasil, R.array.array_Paraguay, R.array.array_Uruguay};
 
+        if (position>0)
+        {
+            position=position-1;
+        }
         //Construcción del "adaptador" para el segundo Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this,
@@ -267,7 +304,10 @@ public class AnamnesisActivity extends Activity implements View.OnClickListener,
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         //Se aplica el adaptador al Spinner de localidades
-        spProvincias.setAdapter(adapter);
+       // spProvincias.setAdapter(adapter);
+        spProvincias.setAdapter(new HintSpinnerAdapter(
+                adapter, R.layout.hint_provincias, this));
+
     }
 
     @Override
@@ -286,18 +326,18 @@ public class AnamnesisActivity extends Activity implements View.OnClickListener,
         MimeMultipart multiParte = new MimeMultipart();
         multiParte.addBodyPart(texto);
 
-        /*BodyPart adjunto = new MimeBodyPart();
+        BodyPart adjunto = new MimeBodyPart();
         String archivo = "Anamnesis_"+etApellido.getText()+"_"+etNombre.getText();
-        String filename = "/data/data/com.gibio.bt_graph/files"+archivo;
-        ;
+        String filename = getApplicationContext().getFilesDir()+archivo;
+        
         DataSource source = new FileDataSource(filename);
 
 
-       /adjunto.setDataHandler(new DataHandler(source));
+        adjunto.setDataHandler(new DataHandler(source));
         adjunto.setFileName(archivo);
 
         multiParte.addBodyPart(adjunto);
-       */
+
 
 
         //

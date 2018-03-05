@@ -1,0 +1,16 @@
+#Tue Nov 28 11:16:04 ART 2017
+renamed.4=classes3.dex
+renamed.3=classes2.dex
+renamed.2=classes5.dex
+renamed.1=classes.dex
+base.4=C\:\\Users\\Agustin\\OneDrive\\Documentos\\FACU\\Android GIBIO\\App_Android_GIBIO\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\2\\additionnal_2e32b2fedd456ffd49a2027b0a2b4290ea32b265
+renamed.0=classes4.dex
+base.3=C\:\\Users\\Agustin\\OneDrive\\Documentos\\FACU\\Android GIBIO\\App_Android_GIBIO\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\2\\activation_e3c907524c75ea5ce0c69bfc651a6512bbc062d7
+base.2=C\:\\Users\\Agustin\\OneDrive\\Documentos\\FACU\\Android GIBIO\\App_Android_GIBIO\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\2\\mail_6249e9863cdacfa70d36fc5af5b10b5362acb85c
+base.1=C\:\\Users\\Agustin\\OneDrive\\Documentos\\FACU\\Android GIBIO\\App_Android_GIBIO\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\support-v4-18.0.0_2810736cca100f43822de5ed3ec28a99d6af16f4
+base.0=C\:\\Users\\Agustin\\OneDrive\\Documentos\\FACU\\Android GIBIO\\App_Android_GIBIO\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\2\\GraphView-3.0_b6cfab7e65aae26baabb6ce49088a54d1ad0b30d
+file.4=C\:\\Users\\Agustin\\OneDrive\\Documentos\\FACU\\Android GIBIO\\App_Android_GIBIO\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\2\\additionnal_2e32b2fedd456ffd49a2027b0a2b4290ea32b265\\classes.dex
+file.3=C\:\\Users\\Agustin\\OneDrive\\Documentos\\FACU\\Android GIBIO\\App_Android_GIBIO\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\2\\activation_e3c907524c75ea5ce0c69bfc651a6512bbc062d7\\classes.dex
+file.2=C\:\\Users\\Agustin\\OneDrive\\Documentos\\FACU\\Android GIBIO\\App_Android_GIBIO\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\2\\mail_6249e9863cdacfa70d36fc5af5b10b5362acb85c\\classes.dex
+file.1=C\:\\Users\\Agustin\\OneDrive\\Documentos\\FACU\\Android GIBIO\\App_Android_GIBIO\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\support-v4-18.0.0_2810736cca100f43822de5ed3ec28a99d6af16f4\\classes.dex
+file.0=C\:\\Users\\Agustin\\OneDrive\\Documentos\\FACU\\Android GIBIO\\App_Android_GIBIO\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\2\\GraphView-3.0_b6cfab7e65aae26baabb6ce49088a54d1ad0b30d\\classes.dex
